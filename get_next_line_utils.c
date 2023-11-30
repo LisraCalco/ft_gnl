@@ -6,30 +6,39 @@
 /*   By: tlegendr <tlegendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 14:06:36 by tlegendr          #+#    #+#             */
-/*   Updated: 2023/11/28 15:57:24 by tlegendr         ###   ########.fr       */
+/*   Updated: 2023/11/30 17:04:16 by tlegendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdlib.h>
 
-void	*ft_calloc(int str_len, int size)
+#include <stdlib.h>
+
+void	*ft_calloc(size_t element_count, size_t element_size)
 {
-	char			*str;
-	unsigned int	n;
+	void	*ptr;
+
+	ptr = malloc(element_count * element_size);
+	if (ptr == NULL)
+		return (NULL);
+	ft_bzero(ptr, element_count * element_size);
+	return (ptr);
+}
+
+void	ft_bzero(void *s, size_t n)
+{
+	char			*ptr;
 	unsigned int	i;
 
-	n = str_len * size;
-	str = malloc(n);
-	if (str == NULL)
-		return (0);
+	ptr = s;
 	i = 0;
 	while (i < n)
 	{
-		str[i] = 0;
+		*ptr = 0;
+		ptr++;
 		i++;
 	}
-	return (str);
 }
 
 char	*ft_strjoin(char *buffer, char *tmp)
@@ -55,74 +64,58 @@ char	*ft_strjoin(char *buffer, char *tmp)
 	}
 	line[i + j] = '\0';
 	free(buffer);
+	free(tmp);
 	return (line);
 }
 
-int	ft_strchr(char *buffer, int new_line_ptr)
+char	*ft_strchr(const char *string, int searchedChar)
 {
 	int	i;
 
 	i = 0;
-	if (buffer && buffer[i] == '\0')
-		return (0);
-	while (buffer && buffer[i] != '\0')
+	while (string[i] != '\0')
 	{
-		if (buffer[i] == new_line_ptr)
-			return (1);
+		if (string[i] == (char)searchedChar)
+			return ((char *)string + i);
 		i++;
 	}
+	if (string[i] == (char)searchedChar)
+		return ((char *)string + i);
 	return (0);
 }
 
 
-//ft_strcpy
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-
-	if (src == 0)
-		return (0);
-	while (src[i] != 0)
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = 0;
-	return (dest);
-}
-
-
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*new_str;
+	char	*str;
 	size_t	i;
-	size_t	j;
 
-	if (s == 0)
-		return (0);
+	i = 0;
 	if (start > (unsigned int)ft_strlen(s))
-		return (ft_calloc(1, 1));
-	new_str = malloc(sizeof(char) * (len + 1));
-	if (new_str == 0)
-		return (0);
-	i = start;
-	j = 0;
-	while (s[i] && j < len)
 	{
-		new_str[j] = s[i];
-		i++;
-		j++;
+		str = malloc(sizeof(char) * 1);
+		if (str == NULL)
+			return (NULL);
+		str[0] = '\0';
+		return (str);
 	}
-	new_str[j] = '\0';
-	return (new_str);
+	if (len >= (unsigned int) ft_strlen(s) - start)
+		len = ft_strlen(s) - start;
+	str = malloc(sizeof(char) *(len + 1));
+	if (str == NULL)
+		return (NULL);
+	while (i < len)
+	{
+		str[i] = s[start + i];
+		i++;
+	}
+	str[i] = '\0';
+	return (str);
 }
 
-int     ft_strlen(const char *string)
+int	ft_strlen(const char *string)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (string[i] != '\0')
