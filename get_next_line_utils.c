@@ -6,7 +6,7 @@
 /*   By: tlegendr <tlegendr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/10 14:06:36 by tlegendr          #+#    #+#             */
-/*   Updated: 2023/11/30 17:04:16 by tlegendr         ###   ########.fr       */
+/*   Updated: 2023/12/01 18:39:05 by tlegendr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,23 @@
 
 #include <stdlib.h>
 
-void	*ft_calloc(size_t element_count, size_t element_size)
+void	*ft_calloc(int str_len, int size)
 {
-	void	*ptr;
-
-	ptr = malloc(element_count * element_size);
-	if (ptr == NULL)
-		return (NULL);
-	ft_bzero(ptr, element_count * element_size);
-	return (ptr);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	char			*ptr;
+	char			*str;
+	unsigned int	n;
 	unsigned int	i;
 
-	ptr = s;
+	n = str_len * size;
+	str = malloc(n);
+	if (str == NULL)
+		return (0);
 	i = 0;
 	while (i < n)
 	{
-		*ptr = 0;
-		ptr++;
+		str[i] = 0;
 		i++;
 	}
+	return (str);
 }
 
 char	*ft_strjoin(char *buffer, char *tmp)
@@ -64,9 +57,9 @@ char	*ft_strjoin(char *buffer, char *tmp)
 	}
 	line[i + j] = '\0';
 	free(buffer);
-	free(tmp);
 	return (line);
 }
+
 
 char	*ft_strchr(const char *string, int searchedChar)
 {
